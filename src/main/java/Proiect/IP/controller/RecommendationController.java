@@ -11,7 +11,7 @@ import Proiect.IP.service.RecommendationService;
 import java.util.List;
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping("/api")
 @AllArgsConstructor
 public class RecommendationController {

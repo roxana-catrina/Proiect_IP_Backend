@@ -31,9 +31,12 @@ public class PatientController {
     //atunci cand se logheaza un nou pacient trebuie sa aleaga numele doctorului la care se afla .
     //cautam  dupa nume medicul ca sa aflam idul
     // checkbox cu nuemele doctorilor
-    @PostMapping("/patient")
+    @PostMapping("/patients")
     public ResponseEntity<?> createPatient(@RequestBody Patient patient , @RequestParam String nameDoctor ) {
-        try { System.out.println(nameDoctor);
+        try {
+
+            System.out.println("Nume doctor: " + nameDoctor);
+            System.out.println(nameDoctor);
             Optional< Doctor> doctor = doctorService.findByName(nameDoctor);
             System.out.println("doctor: " + doctor);
 
@@ -51,10 +54,15 @@ else {
                 System.out.println(doctor.get().getId().toString());
                 return ResponseEntity.status(HttpStatus.CREATED).body(savedDPatient);
             }
-        } catch (Exception e) {
+        } catch (Exception e) {     System.out.println("=== Date primite din frontend ===");
+
             System.out.println("datele:    " + patient.getEmail()+patient.getPhone());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Eroare la salvarea pacientului. Detalii: " + e.getMessage(), e);
+        }
+        finally {
+            System.out.println("Pacient: " + patient);
+            System.out.println("Nume doctor: " + nameDoctor);
         }
     }
 

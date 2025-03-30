@@ -26,5 +26,6 @@ public class Patient {
     private String medicalHistory;
     @Field("doctor_id")
     private String doctorId;
+    private String password;
 
 }

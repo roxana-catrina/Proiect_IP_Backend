@@ -1,7 +1,7 @@
 package Proiect.IP.model;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import lombok.Data;
@@ -23,5 +23,6 @@ public class Doctor {
     private String name;
     private String email;
     private String phone;
+    private String password;
    // private String specialization="medical";
 }

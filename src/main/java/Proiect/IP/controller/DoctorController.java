@@ -40,8 +40,8 @@ public class DoctorController {
 
     @GetMapping("/doctors")
     public List<Doctor> getAllDoctors() {
-      /*  for(Doctor d : doctorService.findAll())
-            System.out.println(d.getId()+"   ");*/
+       for(Doctor d : doctorService.findAll())
+            System.out.println(d.getId()+"   ");
         return doctorService.findAll();
     }
 

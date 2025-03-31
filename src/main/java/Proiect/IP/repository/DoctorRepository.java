@@ -14,4 +14,6 @@ public interface DoctorRepository extends MongoRepository<Doctor, ObjectId> {
   Optional<Doctor> findByName(String name);
 
   Doctor findByEmail(String email);
+
+  boolean existsByEmail(String userEmail);
 }

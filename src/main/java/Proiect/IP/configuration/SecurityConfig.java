@@ -1,8 +1,8 @@
 package Proiect.IP.configuration;
 
-import Proiect.IP.details.DoctorDetails;
-import Proiect.IP.service.DoctorService;
-import lombok.AllArgsConstructor;
+import Proiect.IP.service.CustomDoctorService;
+import Proiect.IP.service.CustomPatientService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,7 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -26,42 +26,39 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@AllArgsConstructor
-public class SecurityDoctor {
-    UserDetailsService userDetailsService;
-    @Bean
-    public static PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+@RequiredArgsConstructor
+public class SecurityConfig {
+    private final JwtAuthentificationFilter jwtAuthentificationFilter;
+    private final CustomDoctorService doctorService;
+    private final CustomPatientService patientService;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthentificationFilter jwtAuthentificationFilter) throws Exception {/*http
-                . exceptionHandling(exception ->
-                exception.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))) ;// Returnează 401*/
-
-        http    .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/doctor", "/api/doctors", "/api/doctor-login").permitAll() // Allow login request
-                                .anyRequest().authenticated()
-                ).sessionManagement(manager->manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/doctor", "/api/doctors", "/api/doctor-login").permitAll()
+                        .requestMatchers("/api/patient", "/api/patients", "/api/patient-login").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(jwtAuthentificationFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin(AbstractHttpConfigurer::disable) ;// Prevent redirect to login page
-
-
+                .addFilterBefore(jwtAuthentificationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setUserDetailsService(username -> {
+            try {
+                return doctorService.loadUserByUsername(username);
+            } catch (UsernameNotFoundException e) {
+                return patientService.loadUserByUsername(username);
+            }
+        });
+        authProvider.setPasswordEncoder(new BCryptPasswordEncoder());
         return authProvider;
     }
-
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
@@ -99,4 +96,8 @@ public class SecurityDoctor {
         return source;
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

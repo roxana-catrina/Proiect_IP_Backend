@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Locale;
 
-@Service
+@Service("customDoctorService")
 @AllArgsConstructor
 public class CustomDoctorService implements UserDetailsService {
     private final DoctorRepository doctorRepository;
@@ -21,6 +21,9 @@ public class CustomDoctorService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Doctor doctor = doctorRepository.findByEmail(username);
+        if (doctor == null) {
+            throw new UsernameNotFoundException("Doctor not found with email: " + username);
+        }
         return new DoctorDetails(
                 doctor.getId(),
                 doctor.getName(),

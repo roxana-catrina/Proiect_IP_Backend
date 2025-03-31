@@ -41,7 +41,7 @@ public class SecurityDoctor {
 
         http    .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/doctor", "/api/doctors").permitAll() // Allow login request
+                        auth.requestMatchers("/api/doctor", "/api/doctors", "/api/doctor-login").permitAll() // Allow login request
                                 .anyRequest().authenticated()
                 ).sessionManagement(manager->manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())

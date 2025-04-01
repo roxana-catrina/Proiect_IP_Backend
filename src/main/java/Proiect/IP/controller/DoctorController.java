@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RequestMapping("/api")
 @AllArgsConstructor
 
@@ -69,7 +69,7 @@ public class DoctorController {
         doctorService.deleteAll();
     }
 
-    @PostMapping("/doctor-login")
+    @PostMapping("/doctor/login")
     public ResponseEntity<?> doctorLogin(@RequestBody AuthenticationRequest authenticationRequest) {
         // 1. Verifică dacă utilizatorul există înainte de autentificare
         Optional<Doctor> optionalDoctor = Optional.ofNullable(doctorRepository.findByEmail(authenticationRequest.getEmail()));
@@ -77,7 +77,9 @@ public class DoctorController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Collections.singletonMap("message", "Utilizatorul nu există"));
         }
-
+         System.out.println(optionalDoctor.get().getId());
+        System.out.println(authenticationRequest.getPassword());
+        System.out.println(authenticationRequest.getEmail());
         // 2. Dacă utilizatorul există, încercăm autentificarea
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(

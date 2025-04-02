@@ -84,7 +84,7 @@ else {
         patientService.deleteAll();
     }
 
-    @PostMapping("/patient-login")
+    @PostMapping("/patient/login")
     public ResponseEntity<?> patientLogin(@RequestBody AuthenticationRequest authenticationRequest) {
         // 1. Verifică dacă utilizatorul există înainte de autentificare
 

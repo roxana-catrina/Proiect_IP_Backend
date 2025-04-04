@@ -17,7 +17,7 @@ import java.util.List;
 public class RecommendationController {
     private RecommendationService recommendationService;
 
-  @PostMapping("/recommendation")
+  @PostMapping("/recommendations")
     public ResponseEntity<Recommendation> createRecommendation(@RequestBody Recommendation recommendation) {
       if(recommendation==null)
           return ResponseEntity.badRequest().body(null);
@@ -34,7 +34,7 @@ public class RecommendationController {
       recommendationService.deleteAll();
     }
 
-  @GetMapping("/{idPatient}/recommendations")
+  @GetMapping("/recommendations/{idPatient}")
   public ResponseEntity<?> getPatientRecommendations(@PathVariable String idPatient) {
     List<Recommendation> recommendations = recommendationService.findAllByPatientId(idPatient);
     if(recommendations.isEmpty()){

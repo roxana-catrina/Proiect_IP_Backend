@@ -103,4 +103,9 @@ public class DoctorController {
         return ResponseEntity.ok(authenticationResponse);
     }
 
+    @GetMapping("doctors/{id}")
+    public ResponseEntity<Doctor> getDoctorById(@PathVariable ObjectId id) {
+        Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+        return optionalDoctor.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().body(null));
+    }
 }

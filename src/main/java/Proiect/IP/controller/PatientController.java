@@ -116,4 +116,11 @@ else {
 
         return ResponseEntity.ok(authenticationResponse);
     }
+
+    @GetMapping("/patients/email/{email}")
+    public ResponseEntity<?> getPatientByEmail(@PathVariable String email) {
+        Optional<Patient> optionalPatient = Optional.ofNullable(patientRepository.findByEmail(email));
+       return ResponseEntity.ok(optionalPatient);
+    }
+
 }

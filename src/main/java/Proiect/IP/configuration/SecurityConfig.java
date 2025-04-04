@@ -38,8 +38,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/doctor", "/api/doctors", "/api/doctor/login").permitAll()
-                        .requestMatchers("/api/patient", "/api/patients", "/api/patient/login").permitAll()
+                        .requestMatchers("/api/doctor", "/api/doctors", "/api/doctor/login","/api/doctors/**").permitAll()
+                        .requestMatchers("/api/patient", "/api/patients", "/api/patient/login","/api/patients/email/**").permitAll()
+                        .requestMatchers("/api/recommendations","/api/recommendations/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

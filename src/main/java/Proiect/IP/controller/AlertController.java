@@ -27,7 +27,7 @@ public class AlertController {
     }
 
 
-    @PostMapping("/alert")
+    @PostMapping("/alerts")
     public ResponseEntity<Alert> createAlert(@RequestBody Alert alert) {
         try {
             if (alert == null   ) {
@@ -49,7 +49,7 @@ public class AlertController {
         alertService.deleteAll();
     }
 
-    @GetMapping("/{idPatient}/alerts")
+    @GetMapping("/alerts/{idPatient}")
     public ResponseEntity<?> getPacientAlerts(@PathVariable String idPatient) {
         List<Alert > alerts = alertService.findAllByPatientId(idPatient);
         if(alerts.isEmpty()){

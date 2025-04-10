@@ -2,6 +2,7 @@ package Proiect.IP.controller;
 
 import Proiect.IP.Authentication.AuthenticationRequest;
 import Proiect.IP.Authentication.AuthenticationResponse;
+import Proiect.IP.DTO.PatientUpdateDTO;
 import Proiect.IP.configuration.JwtUtil;
 import Proiect.IP.model.Doctor;
 import Proiect.IP.model.Patient;
@@ -10,8 +11,10 @@ import Proiect.IP.repository.PatientRepository;
 import Proiect.IP.service.CustomPatientService;
 import Proiect.IP.service.DoctorService;
 import Proiect.IP.service.PatientService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,9 +36,10 @@ public class PatientController {
     private final PatientService patientService;
     private final PatientRepository patientRepository;
     private final DoctorService doctorService;
-    private  final JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
     private final CustomPatientService customPatientService;
     private final AuthenticationManager authenticationManager;
+
     @GetMapping("/patients")
     public List<Patient> getAllPatiens() {
         return patientService.getAll();
@@ -45,35 +49,34 @@ public class PatientController {
     //cautam  dupa nume medicul ca sa aflam idul
     // checkbox cu nuemele doctorilor
     @PostMapping("/patients")
-    public ResponseEntity<?> createPatient(@RequestBody Patient patient , @RequestParam String nameDoctor ) {
+    public ResponseEntity<?> createPatient(@RequestBody Patient patient, @RequestParam String nameDoctor) {
         try {
 
             System.out.println("Nume doctor: " + nameDoctor);
             System.out.println(nameDoctor);
-            Optional< Doctor> doctor = doctorService.findByName(nameDoctor);
+            Optional<Doctor> doctor = doctorService.findByName(nameDoctor);
             System.out.println("doctor: " + doctor);
 
-            if (patient == null  || nameDoctor == null  ) {
+            if (patient == null || nameDoctor == null) {
                 return ResponseEntity.badRequest().body(null);
-            }
+            } else {
 
-else {
+                if (doctor.isEmpty()) {
+                    return ResponseEntity.badRequest().body("Nu s-a găsit doctorul cu numele: " + nameDoctor);
 
-    if(doctor.isEmpty()) {
-        return ResponseEntity.badRequest().body("Nu s-a găsit doctorul cu numele: " + nameDoctor);
-
-    }          patient.setDoctorId(doctor.get().getId().toString());
+                }
+                patient.setDoctorId(doctor.get().getId().toString());
                 Patient savedDPatient = patientService.save(patient);
                 System.out.println(doctor.get().getId().toString());
                 return ResponseEntity.status(HttpStatus.CREATED).body(savedDPatient);
             }
-        } catch (Exception e) {     System.out.println("=== Date primite din frontend ===");
+        } catch (Exception e) {
+            System.out.println("=== Date primite din frontend ===");
 
-            System.out.println("datele:    " + patient.getEmail()+patient.getPhone());
+            System.out.println("datele:    " + patient.getEmail() + patient.getPhone());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
                     "Eroare la salvarea pacientului. Detalii: " + e.getMessage(), e);
-        }
-        finally {
+        } finally {
             System.out.println("Pacient: " + patient);
             System.out.println("Nume doctor: " + nameDoctor);
         }
@@ -106,12 +109,12 @@ else {
         }
 
         // 3. Generăm token-ul și returnăm utilizatorul
-       Patient patient = optionalPatient.get();
-        final String token = jwtUtil.generateToken(customPatientService.loadUserByUsername(patient .getEmail()));
+        Patient patient = optionalPatient.get();
+        final String token = jwtUtil.generateToken(customPatientService.loadUserByUsername(patient.getEmail()));
 
         AuthenticationResponse authenticationResponse = new AuthenticationResponse();
         authenticationResponse.setJwt(token);
-        authenticationResponse.setEmail(patient .getEmail());
+        authenticationResponse.setEmail(patient.getEmail());
         // authenticationResponse.setNume(user.getNume());
 
         return ResponseEntity.ok(authenticationResponse);
@@ -120,7 +123,16 @@ else {
     @GetMapping("/patients/email/{email}")
     public ResponseEntity<?> getPatientByEmail(@PathVariable String email) {
         Optional<Patient> optionalPatient = Optional.ofNullable(patientRepository.findByEmail(email));
-       return ResponseEntity.ok(optionalPatient);
+        return ResponseEntity.ok(optionalPatient);
     }
 
+    @PutMapping("/patient/{id}")
+    public ResponseEntity<?> updatePatient(
+            @PathVariable String id,
+            @RequestBody PatientUpdateDTO updateDTO) {
+
+        Patient updatedPatient = patientService.updatePatient(id, updateDTO);
+
+        return ResponseEntity.ok(updatedPatient);
+    }
 }

@@ -1,5 +1,6 @@
 package Proiect.IP.service;
 
+import Proiect.IP.DTO.PatientUpdateDTO;
 import Proiect.IP.details.DoctorDetails;
 import Proiect.IP.details.PatientDetails;
 import Proiect.IP.model.Doctor;
@@ -10,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 @AllArgsConstructor
@@ -33,4 +36,6 @@ public class CustomPatientService implements UserDetailsService {
                 patient.getPassword()
         );
     }
+
+
 }

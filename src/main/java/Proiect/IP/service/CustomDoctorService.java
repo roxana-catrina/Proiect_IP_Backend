@@ -2,8 +2,10 @@ package Proiect.IP.service;
 
 import javax.print.Doc;
 
+import Proiect.IP.DTO.PatientUpdateDTO;
 import Proiect.IP.details.DoctorDetails;
 import Proiect.IP.model.Doctor;
+import Proiect.IP.model.Patient;
 import Proiect.IP.repository.DoctorRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,4 +34,6 @@ public class CustomDoctorService implements UserDetailsService {
                 doctor.getPassword()
         );
     }
+
+
 }

@@ -13,7 +13,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+//@CrossOrigin(origins = "http://localhost:8083")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api")
 @AllArgsConstructor
 public class SensorController {
@@ -24,7 +25,7 @@ public class SensorController {
     }
 
 
-    @PostMapping("/sensor")
+    @PostMapping("/sensors")
     public ResponseEntity<Sensor> create(@RequestBody Sensor sensor) {
         try {
             if (sensor == null   ) {
@@ -48,7 +49,7 @@ public class SensorController {
     }
 
 
-    @GetMapping("/{idPatient}/sensors")
+    @GetMapping("/sensors/{idPatient}")
     public ResponseEntity<?> getPatientSensors(@PathVariable String idPatient) {
         List<Sensor> sensors = sensorService.findAllByPatientId(idPatient);
         if(sensors.isEmpty()){

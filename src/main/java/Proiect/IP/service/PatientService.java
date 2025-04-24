@@ -69,4 +69,9 @@ public class PatientService {
 
         return null;
     }
+
+
+    public List<Patient> getAllByIdDoctor(String doctorId) {
+        return patientRepository.findAllByDoctorId(doctorId);
+    }
 }

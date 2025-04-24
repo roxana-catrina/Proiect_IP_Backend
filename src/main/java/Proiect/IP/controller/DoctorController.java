@@ -4,8 +4,10 @@ import Proiect.IP.Authentication.AuthenticationRequest;
 import Proiect.IP.Authentication.AuthenticationResponse;
 import Proiect.IP.configuration.JwtUtil;
 import Proiect.IP.details.DoctorDetails;
+import Proiect.IP.model.Patient;
 import Proiect.IP.repository.DoctorRepository;
 import Proiect.IP.service.CustomDoctorService;
+import Proiect.IP.service.PatientService;
 import lombok.AllArgsConstructor;
 import Proiect.IP.model.Doctor;
 import org.apache.catalina.User;
@@ -34,6 +36,7 @@ public class DoctorController {
     private final DoctorService doctorService;
     private final DoctorRepository doctorRepository;
     private final CustomDoctorService customDoctorService;
+    private final PatientService patientService;
     private JwtUtil jwtUtil;
 
     private AuthenticationManager authenticationManager;
@@ -108,4 +111,13 @@ public class DoctorController {
         Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
         return optionalDoctor.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().body(null));
     }
+
+
+    @GetMapping("/doctors/email/{email}")
+    public ResponseEntity<?> getDoctorAllPatients(@PathVariable String email) {
+        Optional<Doctor> optionalDoctor = Optional.ofNullable(doctorRepository.findByEmail(email));
+        List<Patient> patients= patientService.getAllByIdDoctor(String.valueOf(optionalDoctor.get().getId()));
+        return ResponseEntity.ok(patients);
+    }
+
 }

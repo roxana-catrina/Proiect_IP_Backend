@@ -3,6 +3,7 @@ package Proiect.IP.service;
 import Proiect.IP.DTO.PatientUpdateDTO;
 import Proiect.IP.model.Patient;
 import Proiect.IP.repository.PatientRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,9 @@ public class PatientService {
         patient.setPassword(passwordEncoder.encode(patient.getPassword()));
         return patientRepository.save(patient);
     }
-
-    public void deleteAll() {
-        patientRepository.deleteAll();
+    @Transactional
+    public void deleteById(String id) {
+        patientRepository.deleteById(id);
     }
 
     public Patient updatePatient(String patientId, PatientUpdateDTO updateDTO) {

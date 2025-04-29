@@ -5,6 +5,7 @@ import Proiect.IP.service.CustomPatientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -39,7 +40,8 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/doctor", "/api/doctors", "/api/doctor/login","/api/doctors/**","/api/doctors/email/**").permitAll()
-                        .requestMatchers("/api/patient", "/api/patients", "/api/patient/login","/api/patients/email/**","/api/patient/**", "/api/sensors","/api/sensors/**").permitAll()
+
+                        .requestMatchers("/api/patient", "/api/patients", "/api/patient/login","/api/patients/email/**","/api/patient/**", "/api/sensors","/api/sensors/**","/api/patients/**").permitAll()
                         .requestMatchers("/api/recommendations","/api/recommendations/**","/api/alerts","/api/alerts/**").permitAll()
                         .requestMatchers("/api/patient/**").authenticated()
                         .anyRequest().authenticated()
@@ -78,6 +80,7 @@ public class SecurityConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:4200") // Adaugă frontend-ul tău
+
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowCredentials(true);
             }

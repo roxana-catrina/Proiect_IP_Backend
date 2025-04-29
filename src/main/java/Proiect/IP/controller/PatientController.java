@@ -4,8 +4,7 @@ import Proiect.IP.Authentication.AuthenticationRequest;
 import Proiect.IP.Authentication.AuthenticationResponse;
 import Proiect.IP.DTO.PatientUpdateDTO;
 import Proiect.IP.configuration.JwtUtil;
-import Proiect.IP.model.Doctor;
-import Proiect.IP.model.Patient;
+import Proiect.IP.model.*;
 import Proiect.IP.repository.DoctorRepository;
 import Proiect.IP.repository.PatientRepository;
 import Proiect.IP.service.CustomPatientService;
@@ -15,6 +14,7 @@ import com.mongodb.client.result.DeleteResult;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -92,11 +92,28 @@ public class PatientController {
     @DeleteMapping("/patients/{email}")
     public void deletePatients(@PathVariable String email) {
         Query query = new Query(Criteria.where("email").is(email));
+        Patient patient=patientRepository.findByEmail(email);
+           String objectId = patient.getId();
+        System.out.println("Pacient: idd " + objectId);
         DeleteResult result = mongoTemplate.remove(query, Patient.class);
+        Query prescriptionQuery = new Query(Criteria.where("patientId").is(objectId));
+        mongoTemplate.remove(prescriptionQuery, Alert.class);
+
+
+        Query recommendationQuery = new Query(Criteria.where("patientId").is(objectId));
+        mongoTemplate.remove(recommendationQuery , Recommendation.class);
+
+        Query patientQuery = new Query(Criteria.where("patientId").is(objectId));
+        mongoTemplate.remove(patientQuery, Sensor.class);
         System.out.println("Deleted count: " + result.getDeletedCount());
         if (result.getDeletedCount() == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Patient not found");
         }
+
+
+
+
+
     }
     @PostMapping("/patient/login")
     public ResponseEntity<?> patientLogin(@RequestBody AuthenticationRequest authenticationRequest) {

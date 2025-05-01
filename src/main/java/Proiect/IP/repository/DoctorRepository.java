@@ -9,11 +9,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface DoctorRepository extends MongoRepository<Doctor, ObjectId> {
+public interface DoctorRepository extends MongoRepository<Doctor, String> {
 
   Optional<Doctor> findByName(String name);
 
   Doctor findByEmail(String email);
 
   boolean existsByEmail(String userEmail);
+
+
 }

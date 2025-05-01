@@ -11,7 +11,7 @@ import java.util.Collections;
 
 public class DoctorDetails implements UserDetails {
    @Getter
-    private ObjectId id;
+    private String id;
     @Getter
     private String name;
     private String email;
@@ -19,7 +19,7 @@ public class DoctorDetails implements UserDetails {
     private String phone;
     private String password;
 
-    public DoctorDetails(ObjectId id, String name, String email, String phone, String password) {
+    public DoctorDetails(String id, String name, String email, String phone, String password) {
         this.id = id;
         this.name = name;
         this.email = email;

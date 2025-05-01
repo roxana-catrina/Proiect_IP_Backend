@@ -43,4 +43,18 @@ public class RecommendationController {
     }
     return ResponseEntity.status(HttpStatus.CREATED).body(recommendations);
   }
+
+  @PostMapping("/recommendations/{id}")
+  public ResponseEntity<Recommendation> createRecommendation(
+          @PathVariable String id,
+          @RequestBody Recommendation recommendation) {
+
+    recommendation.setPatientId(id);
+
+    // Presupunem că există un serviciu care salvează recomandarea
+    Recommendation savedRecommendation = recommendationService.save(recommendation);
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(savedRecommendation);
+  }
+
 }

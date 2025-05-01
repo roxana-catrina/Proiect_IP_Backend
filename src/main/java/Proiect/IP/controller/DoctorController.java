@@ -106,18 +106,23 @@ public class DoctorController {
         return ResponseEntity.ok(authenticationResponse);
     }
 
-    @GetMapping("doctors/{id}")
-    public ResponseEntity<Doctor> getDoctorById(@PathVariable ObjectId id) {
+    @GetMapping("/doctors/{id}")
+    public ResponseEntity<Doctor> getDoctorById(@PathVariable String id) {
         Optional<Doctor> optionalDoctor = doctorRepository.findById(id);
+
         return optionalDoctor.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().body(null));
     }
+
 
 
     @GetMapping("/doctors/email/{email}")
     public ResponseEntity<?> getDoctorAllPatients(@PathVariable String email) {
         Optional<Doctor> optionalDoctor = Optional.ofNullable(doctorRepository.findByEmail(email));
-        List<Patient> patients= patientService.getAllByIdDoctor(String.valueOf(optionalDoctor.get().getId()));
+        List<Patient> patients= patientService.getAllByIdDoctor(String.valueOf((optionalDoctor.get().getId())));
         return ResponseEntity.ok(patients);
     }
-
+    @GetMapping("/get_doctor/{email}")
+    public ResponseEntity<?> getDoctorByEmail(@PathVariable String email) {
+        return ResponseEntity.ok(doctorRepository.findByEmail(email));
+    }
 }

@@ -17,9 +17,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "doctors")
 public class Doctor {
     @Id
-   // @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Field("_id")
-    private ObjectId id;
+    private String id;
     private String name;
     private String email;
     private String phone;

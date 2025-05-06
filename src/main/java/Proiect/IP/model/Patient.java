@@ -3,8 +3,11 @@ package Proiect.IP.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.Date;
 
 @Data
 @Entity
@@ -27,5 +30,8 @@ public class Patient {
     @Field("doctor_id")
     private String doctorId;
     private String password;
+    @Field("dateBirth")
+    private Date dateBirth;
+    private String job;
 
 }

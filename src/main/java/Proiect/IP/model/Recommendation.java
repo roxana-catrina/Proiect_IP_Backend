@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Document(collection = "recommendations")
@@ -30,6 +31,6 @@ public class Recommendation {
     private String duration;
 
     @Field("created_at")
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
 }

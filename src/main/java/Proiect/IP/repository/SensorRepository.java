@@ -9,4 +9,8 @@ import java.util.List;
 @Repository
 public interface SensorRepository extends MongoRepository<Sensor, String> {
     List<Sensor> findAllByPatientId(String patientId);
+
+    List<Sensor> findByPatientIdOrderByTimestampDesc(String patientId);
+    Sensor findFirstByPatientIdOrderByTimestampDesc(String patientId);
+
 }

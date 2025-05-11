@@ -42,7 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/doctor", "/api/doctors", "/api/doctor/login","/api/doctors/**","/api/get_doctor/**","/api/doctors/email/**").permitAll()
 
                         .requestMatchers("/api/patient", "/api/patients", "/api/patient/login","/api/patients/email/**","/api/patient/**", "/api/sensors","/api/sensors/**","/api/patients/**").permitAll()
-                        .requestMatchers("/api/recommendations","/api/recommendations/**","/api/alerts","/api/alerts/**").permitAll()
+                        .requestMatchers("/api/recommendations","/api/recommendations/**","/api/alerts","/api/alerts/**","/api/sensors/latest/**","/api/sensors/patient/**","/api/sensors/generate-test/**").permitAll()
                         .requestMatchers("/api/patient/**").authenticated()
                         .anyRequest().authenticated()
                 )

@@ -58,4 +58,29 @@ public class SensorController {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(sensors);
     }
+
+
+    @GetMapping("/sensors/latest/{patientId}")
+    public ResponseEntity<Sensor> getLatestSensorData(@PathVariable String patientId) {
+        Sensor sensor = sensorService.getLatestSensorData(patientId);
+        return ResponseEntity.ok(sensor);
+    }
+
+    @GetMapping("/sensors/patient/{patientId}")
+    public ResponseEntity<List<Sensor>> getPatientSensorData(@PathVariable String patientId) {
+        List<Sensor> sensors = sensorService.getPatientSensorData(patientId);
+        return ResponseEntity.ok(sensors);
+    }
+
+    @PostMapping
+    public ResponseEntity<Sensor> saveSensorData(@RequestBody Sensor sensor) {
+        Sensor savedSensor = sensorService.saveSensorData(sensor);
+        return ResponseEntity.ok(savedSensor);
+    }
+
+   /* @PostMapping("/sensors/generate-test/{patientId}")
+    public ResponseEntity<String> generateTestData(@PathVariable String patientId) {
+        sensorService.generateTestData(patientId);
+        return ResponseEntity.ok("Test data generated successfully");
+    }*/
 }

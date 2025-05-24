@@ -17,9 +17,9 @@ public class Sensor {
     private String id;
     @Field("patient_id;")
     private String  patientId;
-    @Field(" ekg_signal;")
+    @Field("ekg_signal;")
     private String ekgSignal;
-    @Field(" heart_rate")
+    @Field("heart_rate")
     private String heartRate;
     private double temperature;
     private double humidity;

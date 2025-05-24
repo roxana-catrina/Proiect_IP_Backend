@@ -78,6 +78,15 @@ public class SensorController {
         return ResponseEntity.ok(savedSensor);
     }
 
+    @GetMapping("/sensors/{idPatient}/latest")
+    public ResponseEntity<?> getLatestPatientSensor(@PathVariable String idPatient) {
+        Sensor latestSensor = sensorService.findLatestByPatientId(idPatient);
+        if(latestSensor == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No sensor data available");
+        }
+        return ResponseEntity.ok(latestSensor);
+    }
+
    /* @PostMapping("/sensors/generate-test/{patientId}")
     public ResponseEntity<String> generateTestData(@PathVariable String patientId) {
         sensorService.generateTestData(patientId);

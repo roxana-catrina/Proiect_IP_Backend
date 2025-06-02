@@ -32,7 +32,7 @@ public class SensorService {
     }
 
     public List<Sensor> getPatientSensorData(String patientId) {
-        return sensorRepository.findByPatientIdOrderByTimestampDesc(patientId);
+        return sensorRepository.findByPatientId(patientId);
     }
 
     public Sensor saveSensorData(Sensor sensor) {

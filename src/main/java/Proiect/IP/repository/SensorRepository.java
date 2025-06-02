@@ -13,4 +13,5 @@ public interface SensorRepository extends MongoRepository<Sensor, String> {
     List<Sensor> findByPatientIdOrderByTimestampDesc(String patientId);
     Sensor findFirstByPatientIdOrderByTimestampDesc(String patientId);
 
+    List<Sensor> findByPatientId(String patientId);
 }

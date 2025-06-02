@@ -32,13 +32,16 @@ public class JwtAuthentificationFilter  extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         log.debug("Processing request: {}", request.getServletPath());
-        if (request.getServletPath().equals("/api/authenticate") ||
-                request.getServletPath().equals("/api/doctor-login") ||
-                request.getServletPath().equals("/api/patient-login")) {
+        String path = request.getServletPath();
+        if (path.equals("/api/authenticate") ||
+                path.equals("/api/doctor-login") ||
+                path.equals("/api/patient-login") ||
+                path.startsWith("/api/sensors")) {
             log.debug("Skipping authentication endpoints");
             filterChain.doFilter(request, response);
             return;
         }
+
 
         final String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {

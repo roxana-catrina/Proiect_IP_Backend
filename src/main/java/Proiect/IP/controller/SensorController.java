@@ -61,10 +61,15 @@ public class SensorController {
 
 
     @GetMapping("/sensors/latest/{patientId}")
-    public ResponseEntity<Sensor> getLatestSensorData(@PathVariable String patientId) {
+    public ResponseEntity<?> getLatestSensorData(@PathVariable String patientId) {
         Sensor sensor = sensorService.getLatestSensorData(patientId);
+        if (sensor == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No sensor data found for patient " + patientId);
+        }
         return ResponseEntity.ok(sensor);
     }
+
 
     @GetMapping("/sensors/patient/{patientId}")
     public ResponseEntity<List<Sensor>> getPatientSensorData(@PathVariable String patientId) {

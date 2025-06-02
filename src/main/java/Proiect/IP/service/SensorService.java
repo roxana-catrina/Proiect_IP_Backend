@@ -39,7 +39,10 @@ public class SensorService {
         sensor.setTimestamp(LocalDateTime.now());
         return sensorRepository.save(sensor);
     }
-
+    public Sensor findLatestByPatientId(String patientId) {
+        List<Sensor> sensors = sensorRepository.findByPatientIdOrderByTimestampDesc(patientId);
+        return sensors.isEmpty() ? null : sensors.get(0);
+    }
 
     /*public void generateTestData(String patientId) {
         List<Sensor> testData = new ArrayList<>();

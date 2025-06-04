@@ -15,13 +15,13 @@ public class Sensor {
     @Id
     @Field("_id")
     private String id;
-    @Field("patient_id;")
+    @Field("patient_id")
     private String  patientId;
-    @Field(" ekg_signal;")
+    @Field("ekg_signal")
     private String ekgSignal;
-    @Field(" heart_rate")
+    @Field("heart_rate")
     private String heartRate;
-    private double temperature;
-    private double humidity;
+    private String temperature;
+    private String humidity;
     private LocalDateTime timestamp;
 }
